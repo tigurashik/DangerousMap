@@ -1,0 +1,101 @@
+{% extends 'layout.html' %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+    <h2>Карта</h2>
+    <div id="map" class="map-container"></div>
+
+    <h3>Добавить точку</h3>
+    <form method="POST" class="glassmorphism form-container">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.coordinates.label }}<br>
+            {{ form.coordinates(class="input-field", placeholder="Например: 37.6173, 55.7558") }}<br>
+            {% for error in form.coordinates.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.description.label }}<br>
+            {{ form.description(class="input-field", placeholder="Описание точки (опционально)") }}<br>
+            {% for error in form.description.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit(class="submit-button") }}</p>
+    </form>
+
+    <script>
+        // Инициализация карты с центром в Москве
+        var map = L.map('map').setView([55.751244, 37.618423], 5);
+
+        // Подключение слоя OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Функция для определения цвета маркера на основе возраста точки
+        function getMarkerColor(createdAt) {
+            var createdDate = new Date(createdAt);
+            var now = new Date();
+            var diffTime = now - createdDate;
+            var diffDays = diffTime / (1000 * 60 * 60 * 24); // Разница в днях
+
+            if (diffDays <= 14) {
+                return 'red'; // Точка создана менее или равна 2 неделям назад
+            } else if (diffDays <= 30) {
+                return 'yellow'; // Точка создана более 2 недель, но менее или равна 1 месяцу
+            } else {
+                return 'blue'; // Дополнительный цвет для точек, которым больше месяца (если они есть)
+            }
+        }
+
+        // Функция для создания стандартного маркера с заданным цветом
+        function createColoredMarker(lat, lon, color, popupContent) {
+            var markerIcon = L.icon({
+                iconUrl: getMarkerIconUrl(color),
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+                shadowSize: [41, 41]
+            });
+
+            L.marker([lat, lon], {icon: markerIcon}).addTo(map)
+                .bindPopup(popupContent);
+        }
+
+        // Функция для получения URL иконки маркера на основе цвета
+        function getMarkerIconUrl(color) {
+            switch(color) {
+                case 'red':
+                    return 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png';
+                case 'yellow':
+                    return 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png';
+                case 'blue':
+                    return 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png';
+                default:
+                    return 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png';
+            }
+        }
+
+        // Получение точек из API
+        fetch('{{ url_for("main.get_points") }}')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(point => {
+                    var popupContent = '';
+                    if (point.description) {
+                        popupContent += `<strong>Описание:</strong> ${point.description}<br>`;
+                    }
+                    popupContent += `<strong>Долгота:</strong> ${point.longitude}<br>`;
+                    popupContent += `<strong>Широта:</strong> ${point.latitude}<br>`;
+                    popupContent += `<strong>Создано:</strong> ${point.created_at}`;
+
+                    var color = getMarkerColor(point.created_at);
+
+                    createColoredMarker(point.latitude, point.longitude, color, popupContent);
+                });
+            })
+            .catch(error => console.error('Ошибка при загрузке точек:', error));
+    </script>
+{% endblock %}

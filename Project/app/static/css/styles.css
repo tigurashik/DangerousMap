@@ -1,0 +1,250 @@
+/* Общие стили */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    color: #ffffff;
+}
+
+/* Применение text-shadow только к определённым текстовым элементам */
+h1, h2, h3, h4, h5, h6, p, span, a, label, button, .nav-link, .welcome, .flash {
+    /* Добавлена только тень без контура */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Исключение применения text-shadow к элементам карты Leaflet */
+.map-container,
+.map-container *,
+.leaflet-popup-content-wrapper,
+.leaflet-popup-content-wrapper *,
+.leaflet-control,
+.leaflet-control *,
+.leaflet-marker-icon,
+.leaflet-marker-icon *,
+.leaflet-popup,
+.leaflet-popup * {
+    text-shadow: none !important;
+}
+
+/* Стиль навигационной панели и контейнера */
+.glassmorphism {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Навигационная панель */
+nav {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.1); /* Полупрозрачный фон */
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav .nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav .nav-link:hover {
+    color: #a0c4ff;
+}
+
+nav .welcome {
+    color: #ffffff;
+    margin-right: auto;
+    font-weight: 500;
+}
+
+/* Контейнер контента */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+/* Форма аутентификации */
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 80px); /* Высота экрана минус высота навигации */
+}
+
+.auth-toggle {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.toggle-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.toggle-button.active {
+    background: #a0c4ff;
+}
+
+.toggle-button:hover {
+    background: #89b0ff;
+}
+
+.forms-container {
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+}
+
+.auth-form {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-form.active {
+    display: flex;
+}
+
+/* Форма */
+.form-container {
+    padding: 20px;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.form-container p {
+    margin-bottom: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    outline: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+}
+
+.input-field::placeholder {
+    color: #e0e0e0;
+}
+
+.input-field:focus {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.submit-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #a0c4ff;
+    color: #ffffff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.submit-button:hover {
+    background: #89b0ff;
+}
+
+/* Карта */
+.map-container {
+    width: 100%;
+    height: 500px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1; /* Обеспечьте, что карта находится поверх других элементов */
+}
+
+/* Сообщения об ошибках и уведомления */
+.flash {
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.flash.success {
+    background: rgba(40, 167, 69, 0.8); /* Зелёный */
+}
+
+.flash.danger {
+    background: rgba(220, 53, 69, 0.8); /* Красный */
+}
+
+/* Стиль для маркеров Leaflet */
+.leaflet-popup-content-wrapper {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 10px;
+}
+
+.leaflet-popup-tip {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .map-container {
+        height: 300px;
+    }
+
+    .auth-container {
+        height: auto;
+        padding: 20px;
+    }
+}

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Мой Сайт{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- Подключение библиотек для карты, например Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Удалено подключение Leaflet Extra Markers -->
+    <!-- Подключение Google Fonts (опционально) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Подключение Font Awesome (опционально) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pk1ZXM3Mz+68g9C3lUccMeP6pFEp0HkV0xyNqlKiLPD4r7qB/RuK6g47DJyW+ld8PTA+hp1I6t3n29Mvl5gO2w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <nav class="glassmorphism">
+        <!-- Навигация -->
+        {% if current_user.is_authenticated %}
+            <span class="welcome">DrugDvizh - Карта | Привет, {{ current_user.username }}!</span>
+            <a href="{{ url_for('main.index') }}" class="nav-link">Главная</a>
+            {% if current_user.is_admin() %}
+                <a href="{{ url_for('admin.dashboard') }}" class="nav-link">Админка</a>
+            {% endif %}
+            <a href="{{ url_for('auth.logout') }}" class="nav-link">Выйти</a>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}" class="nav-link">Войти</a>
+            <a href="{{ url_for('auth.register') }}" class="nav-link">Регистрация</a>
+        {% endif %}
+    </nav>
+    <div class="container glassmorphism">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

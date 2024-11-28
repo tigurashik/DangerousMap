@@ -1,0 +1,95 @@
+{% extends 'layout.html' %}
+{% block title %}Аутентификация{% endblock %}
+{% block content %}
+<div class="auth-container">
+    <div class="auth-toggle">
+        <button id="login-toggle" class="toggle-button active">Войти</button>
+        <button id="register-toggle" class="toggle-button">Регистрация</button>
+    </div>
+    <div class="forms-container">
+        <!-- Форма Входа -->
+        <form id="login-form" method="POST" class="auth-form active">
+            {{ form.hidden_tag() }}
+            <h3>Вход</h3>
+            <div class="form-group">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="input-field", placeholder="Введите ваш Email") }}
+                {% for error in form.email.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="input-field", placeholder="Введите пароль") }}
+                {% for error in form.password.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="submit-button") }}
+            </div>
+        </form>
+
+        <!-- Форма Регистрации -->
+        <form id="register-form" method="POST" class="auth-form">
+            {{ register_form.hidden_tag() }}
+            <h3>Регистрация</h3>
+            <div class="form-group">
+                {{ register_form.username.label(class="form-label") }}
+                {{ register_form.username(class="input-field", placeholder="Введите ваш никнейм") }}
+                {% for error in register_form.username.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ register_form.email.label(class="form-label") }}
+                {{ register_form.email(class="input-field", placeholder="Введите ваш Email") }}
+                {% for error in register_form.email.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ register_form.password.label(class="form-label") }}
+                {{ register_form.password(class="input-field", placeholder="Введите пароль") }}
+                {% for error in register_form.password.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ register_form.confirm_password.label(class="form-label") }}
+                {{ register_form.confirm_password(class="input-field", placeholder="Подтвердите пароль") }}
+                {% for error in register_form.confirm_password.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ register_form.submit(class="submit-button") }}
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript для переключения форм -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginToggle = document.getElementById('login-toggle');
+        const registerToggle = document.getElementById('register-toggle');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+
+        loginToggle.addEventListener('click', function() {
+            loginToggle.classList.add('active');
+            registerToggle.classList.remove('active');
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+        });
+
+        registerToggle.addEventListener('click', function() {
+            registerToggle.classList.add('active');
+            loginToggle.classList.remove('active');
+            registerForm.classList.add('active');
+            loginForm.classList.remove('active');
+        });
+    });
+</script>
+{% endblock %}
